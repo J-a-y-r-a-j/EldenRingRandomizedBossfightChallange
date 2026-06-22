@@ -1,5 +1,8 @@
 package org.example;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.net.URL;
@@ -14,6 +17,7 @@ public class Main{
         int page = rand.nextInt(307);
         System.out.println(page);
         url.append(Integer.toString(page));
+        url.append("?select=name");
         System.out.println(url);
         URL urlobj =  new URL(url.toString());
 
@@ -31,6 +35,16 @@ public class Main{
                 sb.append(s1.next());
             }
             System.out.println(sb);
+            ObjectMapper om = new ObjectMapper();
+            JsonNode root = om.readTree(sb.toString());
+
+            String name = root.path("data").get(0).path("name").asText();
+            String imgpath = root.path("data").get(0).path("image").asText();
+            System.out.println("RANDOM WEAPON:");
+            System.out.println(name);
+            System.out.println(imgpath);
+
+
         }else{
             System.out.println("error");
         }
